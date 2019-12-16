@@ -7,16 +7,50 @@
     <title>OwnCarousel</title>
   </head>
   <body>
-    <div class="carousel-wrapper">
-      <div class="carousel"></div>
+    <div class="carousel">
+      <button class="btn btn--next">Next</button>
+      <button class="btn btn--prev">Back</button>
+      <div class="carousel__wrapper">
+        <img
+          src="https://picsum.photos/500/800?random=1"
+          alt="Carousel Image 1"
+          class="carousel__image"
+        />
+      </div>
+      <div class="carousel__wrapper">
+        <img
+          src="https://picsum.photos/500/800?random=2"
+          alt="Carousel Image 2"
+          class="carousel__image"
+        />
+      </div>
+      <div class="carousel__wrapper">
+        <img
+          src="https://picsum.photos/500/800?random=3"
+          alt="Carousel Image 3"
+          class="carousel__image"
+        />
+      </div>
+      <div class="carousel__wrapper">
+        <img
+          src="https://picsum.photos/500/800?random=4"
+          alt="Carousel Image 4"
+          class="carousel__image"
+        />
+      </div>
+      <div class="carousel__wrapper">
+        <img
+          src="https://picsum.photos/500/800?random=5"
+          alt="Carousel Image 5"
+          class="carousel__image"
+        />
+      </div>
     </div>
     <!-- nodeScripts -->
     <script src="./node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="./node_modules/lodash.template/index.js"></script>
 
     <!-- OwnScripts -->
-
-    <script type="text/template">
-      <img src="<%- source %>" alt="<%- altText %>" class="carousel__element">
-    </script>
+    <script src="./js/controller.js"></script>
   </body>
 </html>
