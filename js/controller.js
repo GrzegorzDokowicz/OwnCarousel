@@ -1,42 +1,47 @@
 function Carousel($element) {
   this.element = $element;
+  this.slides = $(this.element).children('.carousel__wrapper');
   this.setIntialClasses();
   this.attachButtonsEvents();
 }
 
 /**
- * @returns array of childrens elements
- */
-Carousel.prototype.getSlidesNodes = function() {
-  let slides = $(this.element).children('.carousel__wrapper');
-  return slides;
-};
-
-/**
  *it sets classses at the init
  */
 Carousel.prototype.setIntialClasses = function() {
-  let slides = this.getSlidesNodes();
-  let lastEl = slides.length - 1;
+  let slides = this.slides;
+  let lastEl = this.slides.length - 1;
   $(slides[0]).addClass('primary');
   $(slides[1]).addClass('coming');
   $(slides[lastEl]).addClass('recent');
+};
+Carousel.prototype.removeAllClasses = function() {
+  return $(this.slides).removeClass('recent primary coming');
 };
 
 Carousel.prototype.attachButtonsEvents = function() {
   let nextButton = $(this.element).children('.btn--next');
   let prevButton = $(this.element).children('.btn--prev');
-};
-Carousel.prototype.onNextButtonClick = function(button) {
-  let slides = this.getSlidesNodes();
-  let primaryElementPosition = 0;
-  for (index = 0; index < slides.length; index++) {
-    if ($(slides[index]).hasClass('primary')) {
-      return (primaryElementPosition = index);
-    }
-  }
-  return primaryElementPosition;
+  $(nextButton).on('click', this.onNextButtonClick());
 };
 
-let test = new Carousel($('.carousel'));
-console.log(test.onNextButtonClick());
+Carousel.prototype.onNextButtonClick = function() {
+  let self = this;
+  return function() {
+    let slides = self.slides;
+    let primaryElementPosition = 0;
+
+    for (index = 0; index < slides.length; index++) {
+      if ($(slides[index]).hasClass('primary')) {
+        primaryElementPosition = index;
+      }
+    }
+    self.removeAllClasses();
+    console.log(primaryElementPosition);
+    console.log('click');
+  };
+};
+
+$(function() {
+  let test = new Carousel('.carousel');
+});
