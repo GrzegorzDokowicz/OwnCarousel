@@ -12,9 +12,6 @@ function Carousel($element) {
   this.attachButtonsEvents();
 }
 
-/**
- *it sets classses at the init
- */
 Carousel.prototype.setIntialClasses = function() {
   let slides = this.slides;
   let lastElementKey = this.slides.length - 1;
@@ -39,6 +36,7 @@ Carousel.prototype.attachButtonsEvents = function() {
   let nextButton = $(this.element).children('.btn--next');
   let prevButton = $(this.element).children('.btn--prev');
   $(nextButton).on('click', this.onNextButtonClick());
+  $(prevButton).on('click', this.onBackButtonClick());
 };
 
 Carousel.prototype.getClassesPositions = function() {
@@ -75,11 +73,34 @@ Carousel.prototype.moveForward = function() {
 
   return classesEndingPositions;
 };
+Carousel.prototype.moveBackward = function() {
+  let self = this;
+  let lastArrayElementKey = this.slides.length - 1;
+  let classesBeginingPositions = self.getClassesPositions();
+  let classesEndingPositions = Object.assign({}, classesBeginingPositions);
+  let classesEndingPositionsKeys = Object.keys(
+    classesBeginingPositions
+  ).forEach(function(key) {
+    if (classesBeginingPositions[key] === 0) {
+      return (classesEndingPositions[key] = lastArrayElementKey);
+    } else return classesEndingPositions[key]--;
+  });
+
+  return classesEndingPositions;
+};
 
 Carousel.prototype.onNextButtonClick = function() {
   let self = this;
   return function() {
     let newClasses = self.moveForward();
+    self.removeAllClasses();
+    self.setNewClasses(newClasses);
+  };
+};
+Carousel.prototype.onBackButtonClick = function() {
+  let self = this;
+  return function() {
+    let newClasses = self.moveBackward();
     self.removeAllClasses();
     self.setNewClasses(newClasses);
   };
