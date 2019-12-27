@@ -1,9 +1,13 @@
 /**1. zapisz klasy jako stale
  * 2. doczytaj o Object.assign oraz wprowadz object options.
  */
-
-function Carousel($element) {
-  this.element = $element;
+const defaultOptions = {
+  step: 1,
+  selector: '.carousel'
+};
+function Carousel(options) {
+  this.options = Object.assign({}, defaultOptions, options);
+  this.element = this.options.selector;
   this.primaryClassName = 'primary';
   this.recentClassName = 'recent';
   this.comingClassName = 'coming';
@@ -66,9 +70,13 @@ Carousel.prototype.moveForward = function() {
   let classesEndingPositionsKeys = Object.keys(
     classesBeginingPositions
   ).forEach(function(key) {
-    if (classesBeginingPositions[key] === lastArrayElementKey) {
-      return (classesEndingPositions[key] = 0);
-    } else return classesEndingPositions[key]++;
+    if (
+      classesBeginingPositions[key] + self.options.step >
+      lastArrayElementKey
+    ) {
+      return (classesEndingPositions[key] =
+        classesBeginingPositions[key] + self.options.step - self.slides.length);
+    } else return (classesEndingPositions[key] += self.options.step);
   });
 
   return classesEndingPositions;
@@ -81,9 +89,10 @@ Carousel.prototype.moveBackward = function() {
   let classesEndingPositionsKeys = Object.keys(
     classesBeginingPositions
   ).forEach(function(key) {
-    if (classesBeginingPositions[key] === 0) {
-      return (classesEndingPositions[key] = lastArrayElementKey);
-    } else return classesEndingPositions[key]--;
+    if (classesBeginingPositions[key] - self.options.step < 0) {
+      return (classesEndingPositions[key] =
+        classesBeginingPositions[key] - self.options.step + self.slides.length);
+    } else return (classesEndingPositions[key] -= self.options.step);
   });
 
   return classesEndingPositions;
@@ -107,5 +116,6 @@ Carousel.prototype.onBackButtonClick = function() {
 };
 
 $(function() {
-  let test = new Carousel('.carousel');
+  let test = new Carousel();
+  console.log('Current options', test.options);
 });
