@@ -1,10 +1,8 @@
 /**1. zapisz klasy jako stale
  * 2. doczytaj o Object.assign oraz wprowadz object options.
+ * 3. dodaj walidacje opcji - dopisane przeze mnie po napisaniu stepów
  */
-const defaultOptions = {
-  step: 1,
-  selector: '.carousel'
-};
+
 function Carousel(options) {
   this.options = Object.assign({}, defaultOptions, options);
   this.element = this.options.selector;
@@ -14,6 +12,8 @@ function Carousel(options) {
   this.slides = $(this.element).children('.carousel__wrapper');
   this.setIntialClasses();
   this.attachButtonsEvents();
+  this.autoSlide();
+  this.moving = false;
 }
 
 Carousel.prototype.setIntialClasses = function() {
@@ -37,10 +37,11 @@ Carousel.prototype.removeAllClasses = function() {
 };
 
 Carousel.prototype.attachButtonsEvents = function() {
+  let self = this;
   let nextButton = $(this.element).children('.btn--next');
   let prevButton = $(this.element).children('.btn--prev');
-  $(nextButton).on('click', this.onNextButtonClick());
-  $(prevButton).on('click', this.onBackButtonClick());
+  $(nextButton).on('click', debounce(this.onNextButtonClick(), 500, true));
+  $(prevButton).on('click', debounce(this.onBackButtonClick(), 500, true));
 };
 
 Carousel.prototype.getClassesPositions = function() {
@@ -101,18 +102,30 @@ Carousel.prototype.moveBackward = function() {
 Carousel.prototype.onNextButtonClick = function() {
   let self = this;
   return function() {
+    self.moving = true;
     let newClasses = self.moveForward();
     self.removeAllClasses();
     self.setNewClasses(newClasses);
+    self.moving = false;
   };
 };
 Carousel.prototype.onBackButtonClick = function() {
   let self = this;
   return function() {
+    self.moving = true;
     let newClasses = self.moveBackward();
     self.removeAllClasses();
     self.setNewClasses(newClasses);
+    self.moving = false;
   };
+};
+Carousel.prototype.autoSlide = function() {
+  if (this.options.autoslide) {
+    if (!this.moving) {
+      console.log(`autoslide ON`);
+      setInterval(this.onNextButtonClick(), 3000);
+    }
+  }
 };
 
 $(function() {
