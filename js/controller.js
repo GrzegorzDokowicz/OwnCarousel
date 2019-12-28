@@ -10,10 +10,13 @@ function Carousel(options) {
   this.recentClassName = 'recent';
   this.comingClassName = 'coming';
   this.slides = $(this.element).children('.carousel__wrapper');
-  this.setIntialClasses();
-  this.attachButtonsEvents();
-  this.autoSlide();
   this.moving = false;
+  let readyToRun = this.validateArguments();
+  if (readyToRun) {
+    this.setIntialClasses();
+    this.attachButtonsEvents();
+    this.autoSlide();
+  }
 }
 
 Carousel.prototype.setIntialClasses = function() {
@@ -126,6 +129,21 @@ Carousel.prototype.autoSlide = function() {
       setInterval(this.onNextButtonClick(), 3000);
     }
   }
+};
+Carousel.prototype.validateArguments = function() {
+  let optionsKeys = Object.keys(this.options);
+  let errors = [];
+  let flag = true;
+  optionsKeys.filter(function(key) {
+    if (!defaultOptions.hasOwnProperty(key)) {
+      errors.push(key);
+    }
+  });
+  if (errors.length > 0) {
+    console.error('Something was wrong with following arguments', errors);
+    flag = false;
+  }
+  return flag;
 };
 
 $(function() {
