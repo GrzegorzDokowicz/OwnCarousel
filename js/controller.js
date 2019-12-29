@@ -13,6 +13,8 @@ function Carousel(options) {
   this.moving = false;
   let readyToRun = this.validateArguments();
   if (readyToRun) {
+    this.createButtons(`btn--next`, `Next`);
+    this.createButtons(`btn--prev`, `Back`);
     this.setIntialClasses();
     this.attachButtonsEvents();
     this.autoSlide();
@@ -37,6 +39,15 @@ Carousel.prototype.removeAllClasses = function() {
   return $(this.slides).removeClass(
     `${this.recentClassName} ${this.primaryClassName} ${this.comingClassName}`
   );
+};
+
+// It have to be refactored (it should check options only once and then create(or not) the buttons)
+Carousel.prototype.createButtons = function(buttonClassName, ...buttonText) {
+  if (this.options.buttons) {
+    return $(this.element).append(
+      `<button class="btn ${buttonClassName}">${buttonText}</button>`
+    );
+  }
 };
 
 Carousel.prototype.attachButtonsEvents = function() {
@@ -125,7 +136,6 @@ Carousel.prototype.onBackButtonClick = function() {
 Carousel.prototype.autoSlide = function() {
   if (this.options.autoslide) {
     if (!this.moving) {
-      console.log(`autoslide ON`);
       setInterval(this.onNextButtonClick(), 3000);
     }
   }

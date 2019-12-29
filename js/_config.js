@@ -1,5 +1,6 @@
 const defaultOptions = {
   step: 1,
   selector: '.carousel',
-  autoslide: true
+  autoslide: true,
+  buttons: true
 };
