@@ -5,16 +5,17 @@
 
 function Carousel(options) {
   this.options = Object.assign({}, defaultOptions, options);
-  this.element = this.options.selector;
+  this.element = this.options.mainSelector;
   this.primaryClassName = 'primary';
   this.recentClassName = 'recent';
   this.comingClassName = 'coming';
-  this.slides = $(this.element).children('.carousel__wrapper');
+  this.slides = $(this.element).children(this.options.slideSelectors);
   this.moving = false;
   let readyToRun = this.validateArguments();
   if (readyToRun) {
-    this.createButtons(`btn--next`, `Next`);
     this.createButtons(`btn--prev`, `Back`);
+    this.createButtons(`btn--next`, `Next`);
+    this.createDots();
     this.setIntialClasses();
     this.attachButtonsEvents();
     this.autoSlide();
@@ -44,7 +45,7 @@ Carousel.prototype.removeAllClasses = function() {
 // It have to be refactored (it should check options only once and then create(or not) the buttons)
 Carousel.prototype.createButtons = function(buttonClassName, ...buttonText) {
   if (this.options.buttons) {
-    return $(this.element).append(
+    return $(this.element).prepend(
       `<button class="btn ${buttonClassName}">${buttonText}</button>`
     );
   }
@@ -140,6 +141,21 @@ Carousel.prototype.autoSlide = function() {
     }
   }
 };
+Carousel.prototype.createDots = function() {
+  let self = this;
+  let numberOfDots = this.slides.length;
+  if (this.options.dots) {
+    $(self.element).append(`<ul class="carousel__dotsWrapper"></ul>`);
+    for (index = 0; index < numberOfDots; index++) {
+      $(self.element)
+        .children('.carousel__dotsWrapper')
+        .append(
+          `<li class="carousel__dot" data-dotPositon="${index + 1}"></li>`
+        );
+    }
+  }
+};
+
 Carousel.prototype.validateArguments = function() {
   let optionsKeys = Object.keys(this.options);
   let errors = [];
