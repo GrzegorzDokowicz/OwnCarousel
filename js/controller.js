@@ -13,7 +13,11 @@ function Carousel(options) {
   this.moving = false;
   let readyToRun = this.validateArguments();
   if (readyToRun) {
-    this.createButtons(`btn--prev`, `Back`);
+    this.createButtons(
+      `btn--prev`,
+      `
+    Back`
+    );
     this.createButtons(`btn--next`, `Next`);
     this.createDots();
     this.setIntialClasses();
@@ -149,9 +153,7 @@ Carousel.prototype.createDots = function() {
     for (index = 0; index < numberOfDots; index++) {
       $(self.element)
         .children('.carousel__dotsWrapper')
-        .append(
-          `<li class="carousel__dot" data-dotPositon="${index + 1}"></li>`
-        );
+        .append(`<li class="carousel__dot" data-dotPositon="${index}"></li>`);
     }
   }
 };
@@ -167,6 +169,7 @@ Carousel.prototype.validateArguments = function() {
   });
   if (errors.length > 0) {
     console.error('Something was wrong with following arguments', errors);
+    console.warn('Current options are:', this.options);
     flag = false;
   }
   return flag;
