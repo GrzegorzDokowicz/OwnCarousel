@@ -1,0 +1,10 @@
+{
+    "version": 3,
+    "mappings": "ACEA,UAAU,CAAV,MAAU,CACR,EAAE,CACA,iBAAiB,CAAE,iBAAiB,CACpC,SAAS,CAAE,iBAAiB,CAC5B,OAAO,CAAE,CAAC,CAEZ,IAAI,CACF,iBAAiB,CAAE,aAAa,CAChC,SAAS,CAAE,aAAa,CACxB,OAAO,CAAE,CAAC,EDTd,AAAA,kBAAkB,AAAC,CACjB,OAAO,CAAE,KAAK,CACd,OAAO,CAAE,CAAC,CACX,AACD,AAAA,QAAQ,AAAC,CACP,QAAQ,CAAE,QAAQ,CAClB,GAAG,CAAE,CAAC,CACN,OAAO,CAAE,EAAE,CACX,SAAS,CAAE,MAAM,CAAC,IAAI,CAAC,mCAAmC,CAAC,IAAI,CAChE",
+    "sources": [
+        "../../scss/carousel__wrapper.scss",
+        "../../scss/_config.scss"
+    ],
+    "names": [],
+    "file": "carousel__wrapper.min.css"
+}

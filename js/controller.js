@@ -149,24 +149,26 @@ Carousel.prototype.createDots = function() {
   let self = this;
   let numberOfDots = this.slides.length;
   if (this.options.dots) {
-    $(self.element).append(`<ul class="carousel__dotsWrapper"></ul>`);
+    $(self.element).append(`<div class="carousel__dotsWrapper"></div>`);
     for (index = 0; index < numberOfDots; index++) {
       $(self.element)
         .children('.carousel__dotsWrapper')
-        .append(`<li class="carousel__dot"></li>`);
+        .append(`<div class="carousel__dot"></div>`);
     }
   }
 };
 Carousel.prototype.removeDotsClasses = function() {
   return $($('.carousel__dotsWrapper', this.element).children()).removeClass(
-    this.primaryClassName
+    `carousel__dotsWrapper--${this.primaryClassName}`
   );
 };
 Carousel.prototype.updatePrimaryDotClass = function(object) {
   let self = this;
   let primaryClassPosition = object.primary;
   let dots = $('.carousel__dotsWrapper', this.element).children();
-  return $(dots[primaryClassPosition]).addClass(self.primaryClassName);
+  return $(dots[primaryClassPosition]).addClass(
+    `carousel__dotsWrapper--${self.primaryClassName}`
+  );
 };
 
 Carousel.prototype.validateArguments = function() {
