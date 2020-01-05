@@ -132,7 +132,9 @@ Carousel.prototype.onBackButtonClick = function() {
     self.moving = true;
     let newClasses = self.moveBackward();
     self.removeAllClasses();
+    self.removeDotsClasses();
     self.setNewClasses(newClasses);
+    self.updatePrimaryDotClass(newClasses);
     self.moving = false;
   };
 };
