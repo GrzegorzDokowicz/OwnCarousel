@@ -1,8 +1,9 @@
 {
     "version": 3,
-    "mappings": "",
+    "mappings": "ACMA,UAAU,CAAV,MAAU,CACR,EAAE,CACA,iBAAiB,CAAE,iBAAiB,CACpC,SAAS,CAAE,iBAAiB,CAC5B,OAAO,CAAE,CAAC,CAEZ,IAAI,CACF,iBAAiB,CAAE,aAAa,CAChC,SAAS,CAAE,aAAa,CACxB,OAAO,CAAE,CAAC,EDbd,AAAA,IAAI,AAAC,CACH,OAAO,CAAE,EAAE,CACX,MAAM,CAAE,OAAO,CAChB,AAED,AAAA,UAAU,AAAC,CACT,WAAW,CAAE,KAAK,CAClB,QAAQ,CAAE,CAAC,CACZ,AAED,AAAA,UAAU,AAAC,CACT,WAAW,CAAE,KAAK,CACnB",
     "sources": [
-        "../../scss/btn.scss"
+        "../../scss/btn.scss",
+        "../../scss/_config.scss"
     ],
     "names": [],
     "file": "btn.min.css"

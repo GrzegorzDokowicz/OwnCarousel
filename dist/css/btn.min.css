@@ -1,1 +1,2 @@
-/* No CSS *//*# sourceMappingURL=btn.min.css.map */
+@-webkit-keyframes zoomIn{0%{-webkit-transform:translateZ(-80px);transform:translateZ(-80px);opacity:0}100%{-webkit-transform:translateZ(0);transform:translateZ(0);opacity:1}}@keyframes zoomIn{0%{-webkit-transform:translateZ(-80px);transform:translateZ(-80px);opacity:0}100%{-webkit-transform:translateZ(0);transform:translateZ(0);opacity:1}}.btn{z-index:10;cursor:pointer}.btn--next{grid-column:0 / 2;-ms-grid-row:1;grid-row:1}.btn--prev{-ms-grid-column:3;-ms-grid-column-span:1;grid-column:3 / 4}
+/*# sourceMappingURL=btn.min.css.map */
