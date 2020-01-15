@@ -10,27 +10,29 @@ function Carousel(options) {
   this.recentClassName = 'recent';
   this.comingClassName = 'coming';
   this.slides = $(this.element).children(this.options.slideSelectors);
-  this.moving = false;
-  let readyToRun = this.validateArguments();
-  if (readyToRun) {
-    this.createButtons(`btn--prev`, 'Back');
-    this.createButtons(`btn--next`, `Next`);
+  this.moving = false; // do omowienia
+  this.currentStep = 0;
+
+  if (this.validateArguments()) {
+    this.createButtons();
     this.createDots();
     this.setIntialClasses();
     this.attachButtonsEvents();
-    this.autoSlide();
+    this.runAutomaticSlide();
   }
 }
 
 Carousel.prototype.setIntialClasses = function() {
   let slides = this.slides;
   let lastElementKey = this.slides.length - 1;
-  $(slides[0]).addClass(this.primaryClassName);
-  $(slides[1]).addClass(this.comingClassName);
+
+  $(slides[this.currentStep]).addClass(this.primaryClassName);
+  $(slides[this.currentStep + 1]).addClass(this.comingClassName);
   $(slides[lastElementKey]).addClass(this.recentClassName);
 };
-Carousel.prototype.setNewClasses = function(object) {
+Carousel.prototype.setNewClasses = function(index) {
   let slides = this.slides;
+
   $(slides[object.primary]).addClass(this.primaryClassName);
   $(slides[object.coming]).addClass(this.comingClassName);
   $(slides[object.recent]).addClass(this.recentClassName);
@@ -45,18 +47,24 @@ Carousel.prototype.removeAllClasses = function() {
 // It have to be refactored (it should check options only once and then create(or not) the buttons)
 Carousel.prototype.createButtons = function(buttonClassName, ...buttonText) {
   if (this.options.buttons) {
-    return $(this.element).prepend(
-      `<button class="btn ${buttonClassName}">${buttonText}</button>`
-    );
+    this.prevButton = this.createButton(`btn--prev`, 'Back');
+    this.nextButton = this.createButton(`btn--next`, `Next`);
   }
 };
 
+Carousel.prototype.createButton = function(buttonClassName, ...buttonText) {
+  const button = $(
+    `<button class="btn ${buttonClassName}">${buttonText}</button>`
+  );
+
+  $(this.element).append(button);
+
+  return button;
+};
+
 Carousel.prototype.attachButtonsEvents = function() {
-  let self = this;
-  let nextButton = $(this.element).children('.btn--next');
-  let prevButton = $(this.element).children('.btn--prev');
-  $(nextButton).on('click', debounce(this.onNextButtonClick(), 500, true));
-  $(prevButton).on('click', debounce(this.onBackButtonClick(), 500, true));
+  $(this.nextButton).on('click', debounce(this.onNextButtonClick(), 500, true));
+  $(this.prevButton).on('click', debounce(this.onBackButtonClick(), 500, true));
 };
 
 Carousel.prototype.getClassesPositions = function() {
@@ -79,82 +87,70 @@ Carousel.prototype.getClassesPositions = function() {
 };
 
 Carousel.prototype.moveForward = function() {
-  let self = this;
-  let lastArrayElementKey = this.slides.length - 1;
-  let classesBeginingPositions = self.getClassesPositions();
-  let classesEndingPositions = Object.assign({}, classesBeginingPositions);
-  let classesEndingPositionsKeys = Object.keys(
-    classesBeginingPositions
-  ).forEach(function(key) {
-    if (
-      classesBeginingPositions[key] + self.options.step >
-      lastArrayElementKey
-    ) {
-      return (classesEndingPositions[key] =
-        classesBeginingPositions[key] + self.options.step - self.slides.length);
-    } else return (classesEndingPositions[key] += self.options.step);
-  });
-
-  return classesEndingPositions;
+  this.move(true);
 };
 Carousel.prototype.moveBackward = function() {
-  let self = this;
-  let lastArrayElementKey = this.slides.length - 1;
-  let classesBeginingPositions = self.getClassesPositions();
-  let classesEndingPositions = Object.assign({}, classesBeginingPositions);
-  let classesEndingPositionsKeys = Object.keys(
-    classesBeginingPositions
-  ).forEach(function(key) {
-    if (classesBeginingPositions[key] - self.options.step < 0) {
-      return (classesEndingPositions[key] =
-        classesBeginingPositions[key] - self.options.step + self.slides.length);
-    } else return (classesEndingPositions[key] -= self.options.step);
-  });
+  this.move(false);
+};
 
-  return classesEndingPositions;
+Carousel.prototype.prepareIndex = function(forward, currentStep) {
+  const length = this.slides.length;
+  const step = forward ? this.options.step : -this.options.step;
+  let newStep = currentStep + step;
+  newStep = newStep + 1 > length ? newStep + 1 - length : newStep;
+
+  return newStep < 0 ? length - 1 - newStep : newStep;
+};
+
+Carousel.prototype.move = function(forward) {
+  const newStep = this.prepareIndex(forward, this.currentStep);
+
+  if (this.slides[newStep]) {
+    $('.' + this.primaryClassName, this.element).removeClass(
+      this.primaryClassName
+    );
+    $(this.slides[newStep]).addClass(this.primaryClassName);
+    this.currentStep = newStep;
+  }
 };
 
 Carousel.prototype.onNextButtonClick = function() {
   let self = this;
   return function() {
-    self.moving = true;
-    let newClasses = self.moveForward();
-    self.removeAllClasses();
-    self.removeDotsClasses();
-    self.setNewClasses(newClasses);
-    self.updatePrimaryDotClass(newClasses);
-    self.moving = false;
+    self.moveForward();
+    clearInterval(self.moving);
+    self.runAutomaticSlide();
   };
 };
 Carousel.prototype.onBackButtonClick = function() {
   let self = this;
   return function() {
-    self.moving = true;
-    let newClasses = self.moveBackward();
-    self.removeAllClasses();
-    self.removeDotsClasses();
-    self.setNewClasses(newClasses);
-    self.updatePrimaryDotClass(newClasses);
-    self.moving = false;
+    self.moveBackward();
+    clearInterval(self.moving);
+    self.runAutomaticSlide();
   };
 };
-Carousel.prototype.autoSlide = function() {
+Carousel.prototype.runAutomaticSlide = function() {
+  const self = this;
+
   if (this.options.autoslide) {
-    if (!this.moving) {
-      setInterval(this.onNextButtonClick(), 3000);
-    }
+    this.moving = setInterval(function() {
+      self.moveForward();
+    }, 3000);
   }
 };
 Carousel.prototype.createDots = function() {
   let self = this;
   let numberOfDots = this.slides.length;
+
   if (this.options.dots) {
-    $(self.element).append(`<div class="carousel__dotsWrapper"></div>`);
+    var container = $(`<div class="carousel__dotsWrapper"></div>`);
+
     for (index = 0; index < numberOfDots; index++) {
-      $(self.element)
-        .children('.carousel__dotsWrapper')
-        .append(`<div class="carousel__dot"></div>`);
+      container.append(`<div class="carousel__dot"></div>`);
     }
+
+    $(self.element).append(container);
   }
 };
 Carousel.prototype.removeDotsClasses = function() {
@@ -164,7 +160,7 @@ Carousel.prototype.removeDotsClasses = function() {
 };
 Carousel.prototype.updatePrimaryDotClass = function(object) {
   let self = this;
-  let primaryClassPosition = object.primary;
+  let primaryClassPosition = this.primary;
   let dots = $('.carousel__dotsWrapper', this.element).children();
   return $(dots[primaryClassPosition]).addClass(
     `carousel__dotsWrapper--${self.primaryClassName}`
@@ -172,20 +168,17 @@ Carousel.prototype.updatePrimaryDotClass = function(object) {
 };
 
 Carousel.prototype.validateArguments = function() {
-  let optionsKeys = Object.keys(this.options);
-  let errors = [];
-  let flag = true;
-  optionsKeys.filter(function(key) {
-    if (!defaultOptions.hasOwnProperty(key)) {
-      errors.push(key);
-    }
+  const errors = Object.keys(this.options).filter(function(key) {
+    return !defaultOptions.hasOwnProperty(key);
   });
-  if (errors.length > 0) {
+  const flag = errors.length > 0;
+
+  if (flag) {
     console.error('Something was wrong with following arguments', errors);
     console.warn('Current options are:', this.options);
-    flag = false;
   }
-  return flag;
+
+  return !flag;
 };
 
 $(function() {
