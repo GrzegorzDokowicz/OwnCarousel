@@ -4,5 +4,7 @@ const defaultOptions = {
   slideSelectors: '.carousel__wrapper',
   autoslide: true,
   buttons: true,
+  nextButtonText: `Next`,
+  backButtonText: `Back`,
   dots: true
 };
