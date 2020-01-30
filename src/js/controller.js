@@ -2,8 +2,10 @@
  * 2. doczytaj o Object.assign oraz wprowadz object options.
  * 3. dodaj walidacje opcji - dopisane przeze mnie po napisaniu stepów
  */
+import { defaultOptions } from './_config';
+import { debounce } from './helpers';
 
-function Carousel(options) {
+export function Carousel(options) {
   this.options = Object.assign({}, defaultOptions, options);
   this.element = this.options.mainSelector;
   this.primaryClassName = 'primary';
@@ -156,8 +158,3 @@ Carousel.prototype.validateArguments = function() {
 
   return !flag;
 };
-
-$(function() {
-  let test = new Carousel({});
-  console.log('Current options', test.options);
-});

@@ -1,4 +1,4 @@
-const defaultOptions = {
+export const defaultOptions = {
   step: 1,
   mainSelector: '.carousel',
   slideSelectors: '.carousel__wrapper',
