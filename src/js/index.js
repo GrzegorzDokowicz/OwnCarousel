@@ -1,6 +1,6 @@
-import { Carousel } from './controller';
+import $ from 'jquery';
+import Application from './application';
 
-$(function() {
-  let test = new Carousel({});
-  console.log('Current options', test.options);
+$(document).ready(() => {
+  new Application(true);
 });

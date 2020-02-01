@@ -1,4 +1,4 @@
-export const defaultOptions = {
+const defaultOptions = {
   step: 1,
   mainSelector: '.carousel',
   slideSelectors: '.carousel__wrapper',
@@ -8,3 +8,5 @@ export const defaultOptions = {
   backButtonText: `Back`,
   dots: true
 };
+
+export default defaultOptions;
