@@ -6,6 +6,7 @@
 import defaultOptions from './_config';
 import { debounce } from 'lodash';
 import $ from 'jquery';
+import Dots from './dots';
 
 class Carousel {
   constructor(options) {
@@ -17,13 +18,14 @@ class Carousel {
     this.slides = $(this.element).children(this.options.slideSelectors);
     this.moving = false;
     this.currentPrimaryPosition = 0;
+    this.dots = null;
 
     if (this.validateArguments()) {
       this.setIntialClasses();
       this.createButtons();
       this.attachButtonsEvents();
-      this.createDots();
       this.runAutomaticSlide();
+      this.createDots();
     }
   }
 
@@ -92,6 +94,7 @@ class Carousel {
       $('.' + this.primaryClassName, this.element).removeClass(this.primaryClassName);
       $(this.slides[newStep]).addClass(this.primaryClassName);
       this.currentPrimaryPosition = newStep;
+      this.dots.updatePrimaryDotClass(this.currentPrimaryPosition);
     }
   }
 
@@ -110,29 +113,12 @@ class Carousel {
       this.moving = setInterval(() => this.moveForward(), 1500);
     }
   }
+
   createDots() {
-    const numberOfDots = this.slides.length;
-
-    if (this.options.dots) {
-      const container = $(`<div class="carousel__dotsWrapper"></div>`);
-
-      for (let index = 0; index < numberOfDots; index++) {
-        container.append(`<div class="carousel__dot"></div>`);
-      }
-
-      $(this.element).append(container);
+    if (this.options.dots && !this.dots) {
+      this.dots = new Dots(this.element, this.slides, this.primaryClassName, this.currentPrimaryPosition);
+      console.log('Dots created');
     }
-  }
-  removeDotsClasses() {
-    return $($('.carousel__dotsWrapper', this.element).children()).removeClass(
-      `carousel__dotsWrapper--${this.primaryClassName}`
-    );
-  }
-  updatePrimaryDotClass(object) {
-    //do przerobienia
-    let primaryClassPosition = this.primary;
-    let dots = $('.carousel__dotsWrapper', this.element).children();
-    return $(dots[primaryClassPosition]).addClass(`carousel__dotsWrapper--${this.primaryClassName}`);
   }
 
   validateArguments() {
