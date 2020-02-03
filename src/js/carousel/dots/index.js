@@ -25,7 +25,6 @@ class Dots {
     );
   }
   updatePrimaryDotClass(position) {
-    //do przerobienia
     const dots = $('.carousel__dotsWrapper', this.element).children();
     this.removeDotsClasses();
     return $(dots[position]).addClass(`carousel__dotsWrapper--${this.primaryClassName}`);

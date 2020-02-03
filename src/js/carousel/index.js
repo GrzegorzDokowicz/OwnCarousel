@@ -7,6 +7,7 @@ import defaultOptions from './_config';
 import { debounce } from 'lodash';
 import $ from 'jquery';
 import Dots from './dots';
+import Button from './buttons';
 
 class Carousel {
   constructor(options) {
@@ -21,9 +22,9 @@ class Carousel {
     this.dots = null;
 
     if (this.validateArguments()) {
+      console.log('Current options', this.options);
       this.setIntialClasses();
       this.createButtons();
-      this.attachButtonsEvents();
       this.runAutomaticSlide();
       this.createDots();
     }
@@ -43,30 +44,9 @@ class Carousel {
   // It have to be refactored (it should check options only once and then create(or not) the buttons)
   createButtons() {
     if (this.options.buttons) {
-      this.prevButton = this.createButton(`btn--prev`, `${this.options.backButtonText}`);
-      this.nextButton = this.createButton(`btn--next`, `${this.options.nextButtonText}`);
+      this.nextButton = new Button(this.element, this.onNextButtonClick(), `btn--next`, this.options.nextButtonText);
+      this.prevButton = new Button(this.element, this.onBackButtonClick(), `btn--prev`, this.options.backButtonText);
     }
-  }
-
-  createButton(buttonClassName, ...buttonText) {
-    const button = $(`<button class="btn ${buttonClassName}">${buttonText}</button>`);
-
-    $(this.element).prepend(button);
-
-    return button;
-  }
-
-  attachButtonsEvents() {
-    $(() => {
-      $(this.nextButton).on(
-        'click',
-        _.debounce(() => this.onNextButtonClick(), 500, { leading: true })
-      );
-      $(this.prevButton).on(
-        'click',
-        _.debounce(() => this.onBackButtonClick(), 500, { leading: true })
-      );
-    });
   }
 
   moveForward() {
@@ -94,19 +74,25 @@ class Carousel {
       $('.' + this.primaryClassName, this.element).removeClass(this.primaryClassName);
       $(this.slides[newStep]).addClass(this.primaryClassName);
       this.currentPrimaryPosition = newStep;
-      this.dots.updatePrimaryDotClass(this.currentPrimaryPosition);
+      if (this.dots) {
+        this.dots.updatePrimaryDotClass(this.currentPrimaryPosition);
+      }
     }
   }
 
   onNextButtonClick() {
-    this.moveForward();
-    clearInterval(this.moving);
-    setTimeout(this.runAutomaticSlide(), 1500);
+    return () => {
+      this.moveForward();
+      clearInterval(this.moving);
+      setTimeout(this.runAutomaticSlide(), 1500);
+    };
   }
   onBackButtonClick() {
-    this.moveBackward();
-    clearInterval(this.moving);
-    this.runAutomaticSlide();
+    return () => {
+      this.moveBackward();
+      clearInterval(this.moving);
+      this.runAutomaticSlide();
+    };
   }
   runAutomaticSlide() {
     if (this.options.autoslide) {
