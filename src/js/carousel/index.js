@@ -21,8 +21,9 @@ class Carousel {
       console.log('Current options', this.options);
       this.setIntialClasses();
       this.createButtons();
-      this.runAutomaticSlide();
       this.createDots();
+      this.onDotClick(this.dots.container.children())
+      this.runAutomaticSlide();
     }
   }
 
@@ -41,20 +42,10 @@ class Carousel {
   createButtons() {
     if (this.options.buttons) {
       if (!this.nextButton) {
-        this.nextButton = new Button(
-          this.element,
-          () => this.onButtonClick(true),
-          `btn--next`,
-          this.options.nextButtonText
-        );
+        this.nextButton = new Button(this.element, () => this.onButtonClick(true), `btn--next`, this.options.nextButtonText);
       }
       if (!this.prevButton) {
-        this.prevButton = new Button(
-          this.element,
-          () => this.onButtonClick(false),
-          `btn--prev`,
-          this.options.backButtonText
-        );
+        this.prevButton = new Button(this.element, () => this.onButtonClick(false), `btn--prev`, this.options.backButtonText);
       }
     }
   }
@@ -69,13 +60,12 @@ class Carousel {
     return newStep < 0 ? length + newStep : newStep;
   }
 
-  move(forward) {
-    const newStep = this.prepareIndex(forward, this.currentPrimaryPosition);
+  move(direction) {
 
-    if (this.slides[newStep]) {
+    if (this.slides[direction]) {
       $('.' + this.primaryClassName, this.element).removeClass(this.primaryClassName);
-      $(this.slides[newStep]).addClass(this.primaryClassName);
-      this.currentPrimaryPosition = newStep;
+      $(this.slides[direction]).addClass(this.primaryClassName);
+      this.currentPrimaryPosition = direction;
       if (this.dots) {
         this.dots.updatePrimaryDotClass(this.currentPrimaryPosition);
       }
@@ -83,14 +73,15 @@ class Carousel {
   }
 
   onButtonClick(state) {
-    this.move(state);
+    this.move(this.prepareIndex(state, this.currentPrimaryPosition));
     clearInterval(this.moving);
     setTimeout(this.runAutomaticSlide(), 1500);
   }
 
+
   runAutomaticSlide() {
     if (this.options.autoslide) {
-      this.moving = setInterval(() => this.move(true), 1500);
+      this.moving = setInterval(() => this.move(this.prepareIndex(true, this.currentPrimaryPosition)), 1500);
     }
   }
 
@@ -98,6 +89,12 @@ class Carousel {
     if (this.options.dots && !this.dots) {
       this.dots = new Dots(this.element, this.slides, this.primaryClassName, this.currentPrimaryPosition);
       console.log('Dots created');
+    }
+  }
+
+  onDotClick(container) {
+    for (let index = 0; index < container.length; index++) {
+      $(container[index]).on('click', () => this.move(index))
     }
   }
 
