@@ -1,6 +1,4 @@
 import Carousel from '../carousel';
-import IconLink from '../icon-link';
-import $ from 'jquery';
 
 class Application {
   constructor(initCarousel = true) {
@@ -9,10 +7,6 @@ class Application {
     if (initCarousel) {
       this.initializeCarousel();
     }
-
-    new IconLink($('.icon'), function(value) {
-      console.log('From icon link callback', value);
-    });
   }
 
   initializeCarousel() {

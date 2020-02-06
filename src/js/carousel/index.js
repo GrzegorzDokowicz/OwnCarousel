@@ -1,10 +1,4 @@
-/**1. zapisz klasy jako stale
- * 2. doczytaj o Object.assign oraz wprowadz object options.
- * 3. dodaj walidacje opcji - dopisane przeze mnie po napisaniu stepów
- */
-
 import defaultOptions from './_config';
-import { debounce } from 'lodash';
 import $ from 'jquery';
 import Dots from './dots';
 import Button from './buttons';
@@ -13,13 +7,15 @@ class Carousel {
   constructor(options) {
     this.options = Object.assign({}, defaultOptions, options);
     this.element = this.options.mainSelector;
+    this.slides = $(this.element).children(this.options.slideSelectors);
     this.primaryClassName = 'primary';
     this.recentClassName = 'recent';
     this.comingClassName = 'coming';
-    this.slides = $(this.element).children(this.options.slideSelectors);
-    this.moving = false;
     this.currentPrimaryPosition = 0;
+    this.moving = false;
     this.dots = null;
+    this.nextButton = null;
+    this.prevButton = null;
 
     if (this.validateArguments()) {
       console.log('Current options', this.options);
@@ -44,18 +40,24 @@ class Carousel {
   // It have to be refactored (it should check options only once and then create(or not) the buttons)
   createButtons() {
     if (this.options.buttons) {
-      this.nextButton = new Button(this.element, this.onNextButtonClick(), `btn--next`, this.options.nextButtonText);
-      this.prevButton = new Button(this.element, this.onBackButtonClick(), `btn--prev`, this.options.backButtonText);
+      if (!this.nextButton) {
+        this.nextButton = new Button(
+          this.element,
+          () => this.onButtonClick(true),
+          `btn--next`,
+          this.options.nextButtonText
+        );
+      }
+      if (!this.prevButton) {
+        this.prevButton = new Button(
+          this.element,
+          () => this.onButtonClick(false),
+          `btn--prev`,
+          this.options.backButtonText
+        );
+      }
     }
   }
-
-  moveForward() {
-    this.move(true);
-  }
-  moveBackward() {
-    this.move(false);
-  }
-
   prepareIndex(forward, currentStep) {
     const length = this.slides.length;
     const step = forward ? this.options.step : -this.options.step;
@@ -80,23 +82,15 @@ class Carousel {
     }
   }
 
-  onNextButtonClick() {
-    return () => {
-      this.moveForward();
-      clearInterval(this.moving);
-      setTimeout(this.runAutomaticSlide(), 1500);
-    };
+  onButtonClick(state) {
+    this.move(state);
+    clearInterval(this.moving);
+    setTimeout(this.runAutomaticSlide(), 1500);
   }
-  onBackButtonClick() {
-    return () => {
-      this.moveBackward();
-      clearInterval(this.moving);
-      this.runAutomaticSlide();
-    };
-  }
+
   runAutomaticSlide() {
     if (this.options.autoslide) {
-      this.moving = setInterval(() => this.moveForward(), 1500);
+      this.moving = setInterval(() => this.move(true), 1500);
     }
   }
 
