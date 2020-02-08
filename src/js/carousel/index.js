@@ -9,8 +9,6 @@ class Carousel {
     this.element = this.options.mainSelector;
     this.slides = $(this.element).children(this.options.slideSelectors);
     this.primaryClassName = 'primary';
-    this.recentClassName = 'recent';
-    this.comingClassName = 'coming';
     this.currentPrimaryPosition = 0;
     this.moving = false;
     this.dots = null;
@@ -18,8 +16,8 @@ class Carousel {
     this.prevButton = null;
 
     if (this.validateArguments()) {
-      console.log('Current options', this.options);
-      this.setIntialClasses();
+      if (this.options.showOptions) { console.log('Current slider options', this.options) };
+      this.setIntialClass();
       this.createButtons();
       this.createDots();
       this.onDotClick(this.dots.container.children())
@@ -27,15 +25,8 @@ class Carousel {
     }
   }
 
-  setIntialClasses() {
+  setIntialClass() {
     $(this.slides[this.currentPrimaryPosition]).addClass(this.primaryClassName);
-  }
-  setNewClasses() {
-    const slides = this.slides;
-
-    $(slides[object.primary]).addClass(this.primaryClassName);
-    $(slides[object.coming]).addClass(this.comingClassName);
-    $(slides[object.recent]).addClass(this.recentClassName);
   }
 
   // It have to be refactored (it should check options only once and then create(or not) the buttons)
@@ -81,20 +72,23 @@ class Carousel {
 
   runAutomaticSlide() {
     if (this.options.autoslide) {
-      this.moving = setInterval(() => this.move(this.prepareIndex(true, this.currentPrimaryPosition)), 1500);
+      this.moving = setInterval(() => this.move(this.prepareIndex(true, this.currentPrimaryPosition)), this.options.slideInterval);
     }
   }
 
   createDots() {
     if (this.options.dots && !this.dots) {
-      this.dots = new Dots(this.element, this.slides, this.primaryClassName, this.currentPrimaryPosition);
-      console.log('Dots created');
+      this.dots = new Dots(this.element, this.slides, this.primaryClassName);
     }
   }
 
   onDotClick(container) {
     for (let index = 0; index < container.length; index++) {
-      $(container[index]).on('click', () => this.move(index))
+      $(container[index]).on('click', () => {
+        clearInterval(this.moving);
+        setTimeout(this.runAutomaticSlide(), 1500);
+        return this.move(index);
+      })
     }
   }
 

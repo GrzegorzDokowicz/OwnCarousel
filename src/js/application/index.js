@@ -11,8 +11,7 @@ class Application {
 
   initializeCarousel() {
     if (!this.carousel) {
-      this.carousel = new Carousel({});
-      console.log('Initialized carousel');
+      this.carousel = new Carousel();
     }
   }
 }

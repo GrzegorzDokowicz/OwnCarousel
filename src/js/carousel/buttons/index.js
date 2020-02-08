@@ -1,7 +1,5 @@
 import $ from 'jquery';
-import {
-  debounce
-} from 'lodash';
+import { debounce } from 'lodash';
 
 class Button {
   constructor(element, callback, buttonClassName, ...buttonText) {
@@ -23,16 +21,8 @@ class Button {
     return (this.button = button);
   }
 
-
-
   attachButtonEvent() {
-    $(() => {
-      $(this.button).on('click',
-        debounce(() => this.callback(), 500, {
-          leading: true
-        })
-      );
-    });
+    $(() => { $(this.button).on('click', debounce(() => this.callback(), 500, { leading: true })); });
   }
 }
 

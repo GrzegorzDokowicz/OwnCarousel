@@ -1,13 +1,15 @@
 import $ from 'jquery';
 
 class Dots {
-  constructor($el, slides, primaryClassName, callback) {
+  constructor($el, slides, primaryClassName) {
     this.$element = $el;
     this.slides = slides;
     this.primaryClassName = primaryClassName;
     this.container = $(`<div class="carousel__dotsWrapper"></div>`)
+    this.dotsArray = null
 
     this.createDots(this.container);
+    this.getDotsArray()
   }
 
   createDots(container) {
@@ -20,13 +22,15 @@ class Dots {
     $(this.$element).append(container);
   }
 
-
+  getDotsArray() {
+    return this.dotsArray = $('.carousel__dotsWrapper', this.element).children()
+  }
 
   removeDotsClasses() {
-    return $($('.carousel__dotsWrapper', this.element).children()).removeClass(`carousel__dotsWrapper--${this.primaryClassName}`);
+    return this.dotsArray.removeClass(`carousel__dotsWrapper--${this.primaryClassName}`);
   }
   updatePrimaryDotClass(position) {
-    const dots = $('.carousel__dotsWrapper', this.element).children();
+    const dots = this.dotsArray
 
     this.removeDotsClasses();
     return $(dots[position]).addClass(`carousel__dotsWrapper--${this.primaryClassName}`);
