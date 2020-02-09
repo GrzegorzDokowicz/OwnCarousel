@@ -26,14 +26,15 @@ class Dots {
     return this.dotsArray = $('.carousel__dotsWrapper', this.element).children()
   }
 
-  removeDotsClasses() {
-    return this.dotsArray.removeClass(`carousel__dotsWrapper--${this.primaryClassName}`);
+  removeDotsClasses(className) {
+    return this.dotsArray.removeClass(className);
   }
   updatePrimaryDotClass(position) {
     const dots = this.dotsArray
+    const primaryDotClassName = `carousel__dot--${this.primaryClassName}`
 
-    this.removeDotsClasses();
-    return $(dots[position]).addClass(`carousel__dotsWrapper--${this.primaryClassName}`);
+    this.removeDotsClasses(primaryDotClassName);
+    return $(dots[position]).addClass(primaryDotClassName);
   }
 }
 
