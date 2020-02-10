@@ -8,7 +8,7 @@ class Carousel {
     this.options = Object.assign({}, defaultOptions, options);
     this.element = this.options.mainSelector;
     this.slides = $(this.element).children(this.options.slideSelectors);
-    this.primaryClassName = 'primary';
+    this.primaryClassName = 'carousel__wrapper--primary';
     this.currentPrimaryPosition = 0;
     this.moving = false;
     this.dots = null;
@@ -78,7 +78,8 @@ class Carousel {
 
   createDots() {
     if (this.options.dots && !this.dots) {
-      this.dots = new Dots(this.element, this.slides, this.primaryClassName);
+      this.dots = new Dots(this.element, this.slides);
+      this.dots.updatePrimaryDotClass(0) // It's set up 1st dot as primary at the beginning
     }
   }
 

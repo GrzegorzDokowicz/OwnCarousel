@@ -1,10 +1,9 @@
 import $ from 'jquery';
 
 class Dots {
-  constructor($el, slides, primaryClassName) {
+  constructor($el, slides) {
     this.$element = $el;
     this.slides = slides;
-    this.primaryClassName = primaryClassName;
     this.container = $(`<div class="carousel__dotsWrapper"></div>`)
     this.dotsArray = null
 
@@ -31,7 +30,7 @@ class Dots {
   }
   updatePrimaryDotClass(position) {
     const dots = this.dotsArray
-    const primaryDotClassName = `carousel__dot--${this.primaryClassName}`
+    const primaryDotClassName = `carousel__dot--primary`
 
     this.removeDotsClasses(primaryDotClassName);
     return $(dots[position]).addClass(primaryDotClassName);
