@@ -1,23 +1,40 @@
 import $ from 'jquery';
 
 class Dots {
-  constructor($el, slides) {
+  constructor($el, slides, clickOnDots) {
     this.$element = $el;
     this.slides = slides;
     this.container = $(`<div class="carousel__dotsWrapper"></div>`)
     this.dotsArray = null
 
     this.createDots(this.container);
-    this.getDotsArray()
+    this.getDotsArray();
+
+    $('.carousel__dot', $el).on('click', $event => {
+      if (clickOnDots) {
+        this.dotsElements.find(element => {
+          if ($event.currentTarget === element.object[0]) {
+            clickOnDots(element.index);
+          }
+        })
+      }
+    });
   }
 
   createDots(container) {
     const numberOfDots = this.slides.length;
+    this.dotsElements = [];
 
     for (let index = 0; index < numberOfDots; index++) {
-      container.append(`<div class="carousel__dot"></div>`);
-    }
+      const object = $(`<div class="carousel__dot"></div>`);
 
+      this.dotsElements.push({
+        object,
+        index
+      })
+
+      container.append(object);
+    }
     $(this.$element).append(container);
   }
 

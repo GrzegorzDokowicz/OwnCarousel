@@ -20,7 +20,6 @@ class Carousel {
       this.setIntialClass();
       this.createButtons();
       this.createDots();
-      this.onDotClick(this.dots.container.children())
       this.runAutomaticSlide();
     }
   }
@@ -78,19 +77,17 @@ class Carousel {
 
   createDots() {
     if (this.options.dots && !this.dots) {
-      this.dots = new Dots(this.element, this.slides);
+      this.dots = new Dots(this.element, this.slides, index => {
+        this.onDotClick(index);
+      });
       this.dots.updatePrimaryDotClass(0) // It's set up 1st dot as primary at the beginning
     }
   }
 
-  onDotClick(container) {
-    for (let index = 0; index < container.length; index++) {
-      $(container[index]).on('click', () => {
-        clearInterval(this.moving);
-        setTimeout(this.runAutomaticSlide(), 1500);
-        return this.move(index);
-      })
-    }
+  onDotClick(index) {
+    clearInterval(this.moving);
+    setTimeout(this.runAutomaticSlide(), 1500);
+    return this.move(index);
   }
 
   validateArguments() {
