@@ -11,6 +11,7 @@ class Application {
 
   initializeCarousel() {
     if (!this.carousel) {
+      //If you pass object as a new Carousel parameter, you will modify your slider.
       this.carousel = new Carousel();
     }
   }

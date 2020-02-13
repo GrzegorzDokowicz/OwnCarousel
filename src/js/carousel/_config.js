@@ -1,5 +1,5 @@
 const defaultOptions = {
-  showOptions: true,
+  showOptions: false, // do usuniecia
   slideInterval: 3000,
   step: 1,
   mainSelector: '.carousel',
