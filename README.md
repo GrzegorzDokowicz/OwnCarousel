@@ -34,31 +34,27 @@ npm run server
 
 Slider is initialized with default options. If you want to change it, you just need to pass options as object to Carousel initialization. You will find it at './src/js/application/index.js'
 
-| Param Name  | Default value | Value type | Description |
+| Parameter Name  | Default value | Value type | Description |
 | ------------- | ------------- | ------------- | ------------- |
-| slideInterval | 3000  | Number  | Content Cell  |
-| step  | 1  | Number  | Content Cell  |
-| mainSelector  | '.carousel'  | String  | Content Cell  |
-| slideSelectors  | '.slideSelectors  | String  | Content Cell  |
-| autoslide  | true  | Boolean  | Content Cell  |
-| buttons  | true  | Boolean  | Content Cell  |
-| nextButtonText  | 'Next'  | String  | Content Cell  |
-| backButtonText  | 'Back'  | String  | Content Cell  |
-| dots  | true  | Boolean  | Content Cell  |
+| step  | 1  | Number  | Number of steps which slider takes at every run (click or autslide). NOTE! Step cannot be greater than your total slides number f.e. if you have 5 photos maximum step will be 4  |
+| slideInterval | 3000  | Number  | Time between autoslides in ms |
+| autoslide  | true  | Boolean  | If true autoslide is ON, if false then it is OFF |
+| mainSelector  | '.carousel'  | String  | Main selector of your slider container. NOTE! If you change it, remember to change it in proper scss file too. |
+| slideSelectors  | '.carousel__wrapper'  | String  | Selector of every slide wrapper. NOTE! If you change it, remember to change selector in proper scss file too. |
+| buttons  | true  | Boolean  | If true buttons are ON, if false then their are OFF  |
+| nextButtonText  | 'Next'  | String  | Text which will be rendered at next button  |
+| backButtonText  | 'Back'  | String  | Text which will be rendered at back button  |
+| dots  | true  | Boolean  | If true dots under sider are ON, if false then their are OFF  |
 
 
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [Jquery](https://jquery.com/) - Popular JavaScript library.
+* [Lodash](https://lodash.com/) - A modern JavaScript utility library delivering modularity, performance & extras.
+* [Webpack](https://webpack.js.org/) - It is a static module bundler for modern JavaScript applications
 
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+ **Grzegorz Dokowicz**
