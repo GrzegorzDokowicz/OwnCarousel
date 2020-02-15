@@ -3,6 +3,11 @@ import $ from 'jquery';
 import Dots from './dots';
 import Button from './buttons';
 
+/**
+ *Main Carousel class. 
+ *
+ * @class Carousel
+ */
 class Carousel {
   constructor(options) {
     this.options = Object.assign({}, defaultOptions, options);
@@ -16,7 +21,6 @@ class Carousel {
     this.prevButton = null;
 
     if (this.validateArguments()) {
-      if (this.options.showOptions) { console.log('Current slider options', this.options) };
       this.setIntialClass();
       this.createButtons();
       this.createDots();
@@ -24,11 +28,11 @@ class Carousel {
     }
   }
 
+
   setIntialClass() {
     $(this.slides[this.currentPrimaryPosition]).addClass(this.primaryClassName);
   }
 
-  // It have to be refactored (it should check options only once and then create(or not) the buttons)
   createButtons() {
     if (this.options.buttons) {
       if (!this.nextButton) {
@@ -39,10 +43,15 @@ class Carousel {
       }
     }
   }
+
+  /**
+   * It will prepare Step for move function
+   * @param {Boolean} forward 
+   * @param {Number} currentStep 
+   */
   prepareIndex(forward, currentStep) {
     const length = this.slides.length;
     const step = forward ? this.options.step : -this.options.step;
-
     let newStep = currentStep + step;
 
     newStep = newStep + 1 > length ? newStep - length : newStep;
@@ -50,6 +59,13 @@ class Carousel {
     return newStep < 0 ? length + newStep : newStep;
   }
 
+
+  /**
+   *This function is removing primary class and add primary to new element
+   *
+   * @param {number} direction
+   * @memberof Carousel
+   */
   move(direction) {
 
     if (this.slides[direction]) {
@@ -62,6 +78,13 @@ class Carousel {
     }
   }
 
+
+  /**
+   *Activate on button click
+   *
+   * @param {Boolean} state - True for moving forward, false for moving backward
+   * @memberof Carousel
+   */
   onButtonClick(state) {
     this.move(this.prepareIndex(state, this.currentPrimaryPosition));
     clearInterval(this.moving);
@@ -80,19 +103,49 @@ class Carousel {
       this.dots = new Dots(this.element, this.slides, index => {
         this.onDotClick(index);
       });
-      this.dots.updatePrimaryDotClass(0) // It's set up 1st dot as primary at the beginning
+      this.dots.updatePrimaryDotClass(0) // It sets up 1st dot as primary at the beginning
     }
   }
 
+
+  /**
+   *Activate on dotClick
+   *
+   * @param {number} index
+   * @returns callback for dotClick 
+   * @memberof Carousel
+   */
   onDotClick(index) {
     clearInterval(this.moving);
     setTimeout(this.runAutomaticSlide(), 1500);
     return this.move(index);
   }
 
-  validateArguments() {
+
+  /**
+   * checks if slides number is greater than current step
+   * @returns Boolean 
+   * @memberof Carousel
+   */
+  checkStep() {
+    const flag = this.slides.length > this.options.step
+    if (!flag) {
+      console.error("Your step is greater than your slides number")
+    }
+    return flag
+  }
+
+
+  /**
+   * Checks if passed options parameters are valid
+   *
+   * @returns Boolean
+   * @memberof Carousel
+   */
+  validateOptionsName() {
+    //Check if passed config object properties are valid
     const errors = Object.keys(this.options).filter(key => !defaultOptions.hasOwnProperty(key));
-    const flag = errors.length > 0;
+    const flag = errors.length > 0
 
     if (flag) {
       console.error('Something was wrong with following arguments', errors);
@@ -101,6 +154,13 @@ class Carousel {
 
     return !flag;
   }
+
+  validateArguments() {
+    const flag = this.checkStep() && this.validateOptionsName()
+    return flag
+  }
 }
+
+
 
 export default Carousel;

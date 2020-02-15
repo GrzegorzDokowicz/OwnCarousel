@@ -1,3 +1,4 @@
+//DefaultOptions object for Carousel
 const defaultOptions = {
   step: 1,
   slideInterval: 3000,
@@ -8,7 +9,6 @@ const defaultOptions = {
   nextButtonText: `Next`,
   backButtonText: `Back`,
   dots: true,
-  showOptions: false // do usuniecia
 };
 
 export default defaultOptions;

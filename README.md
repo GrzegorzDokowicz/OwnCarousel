@@ -34,7 +34,7 @@ npm run server
 
 Slider is initialized with default options. If you want to change it, you just need to pass options as object to Carousel initialization. You will find it at './src/js/application/index.js'
 
-| Parameter Name  | Default value | Value type | Description |
+| Parameter Name  | Default | Value type | Description |
 | ------------- | ------------- | ------------- | ------------- |
 | step  | 1  | Number  | Number of steps which slider takes at every run (click or autslide). NOTE! Step cannot be greater than your total slides number f.e. if you have 5 photos maximum step will be 4  |
 | slideInterval | 3000  | Number  | Time between autoslides in ms |
@@ -52,6 +52,7 @@ Slider is initialized with default options. If you want to change it, you just n
 
 * [Jquery](https://jquery.com/) - Popular JavaScript library.
 * [Lodash](https://lodash.com/) - A modern JavaScript utility library delivering modularity, performance & extras.
+* [NPM](https://www.npmjs.com/) - Package manager
 * [Webpack](https://webpack.js.org/) - It is a static module bundler for modern JavaScript applications
 
 
