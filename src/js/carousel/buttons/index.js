@@ -22,7 +22,8 @@ class Button {
   }
 
   attachButtonEvent() {
-    $(() => { $(this.button).on('click', debounce(() => this.callback(), 500, { leading: true })); });
+    if (this.callback && typeof this.callback == 'function')
+      $(() => { $(this.button).on('click', debounce(() => this.callback(), 500, { leading: true })); });
   }
 }
 

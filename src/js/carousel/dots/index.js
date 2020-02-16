@@ -48,7 +48,7 @@ class Dots {
   }
   onDotClick(callback) {
     $(`.${this.singleDotClassName}`, this.$element).on('click', $event => {
-      if (callback) {
+      if (callback && typeof callback == 'function') {
         this.dotsElements.find(element => {
           if ($event.currentTarget === element.object[0]) {
             callback(element.index);
