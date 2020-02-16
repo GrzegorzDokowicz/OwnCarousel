@@ -17,7 +17,7 @@ git clone "Here you paste your copied link"
 ```
 
 And press Enter. This should clone all files to your local machine. 
-After this process is done, you need to download all dependencies. To do this type in your console. 
+After this process, you need to download all dependencies. To do this type in your console. 
 
 ```
 npm install
