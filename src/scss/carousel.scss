@@ -1,0 +1,35 @@
+@import './config.scss';
+
+* {
+  margin: 0;
+  padding: 0;
+
+}
+body{
+  background-color: rgba(49, 44, 44, 0.931);
+  display: grid;
+  height: 100vh;
+}
+
+.carousel {
+  justify-self: center;
+  align-self: center;
+  display: grid;
+  grid-template-columns: $buttons-width ($carousel-width - (2 * $buttons-width) $buttons-width);
+  grid-template-rows: $carousel-height auto;
+  margin: 0;
+  padding: 0;
+  height: auto;
+  width: $carousel-width;
+  overflow: hidden;
+  position: relative;
+  * {
+    box-sizing: border-box;
+  }
+
+  &:hover >.btn{
+    opacity:1;
+    transition: opacity 0.5s ease-in-out;
+  }
+
+}
