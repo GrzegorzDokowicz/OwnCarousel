@@ -4,21 +4,15 @@ class Dots {
   constructor($el, slides, clickOnDots) {
     this.$element = $el;
     this.slides = slides;
-    this.container = $(`<div class="carousel__dotsWrapper"></div>`)
+    this.containerClassName = `carousel__dotsWrapper`
+    this.container = $(`<div class="${this.containerClassName}"></div>`)
+    this.singleDotClassName = 'carousel__dot'
     this.dotsArray = null
 
     this.createDots(this.container);
     this.getDotsArray();
+    this.onDotClick(clickOnDots)
 
-    $('.carousel__dot', $el).on('click', $event => {
-      if (clickOnDots) {
-        this.dotsElements.find(element => {
-          if ($event.currentTarget === element.object[0]) {
-            clickOnDots(element.index);
-          }
-        })
-      }
-    });
   }
 
   createDots(container) {
@@ -26,7 +20,7 @@ class Dots {
     this.dotsElements = [];
 
     for (let index = 0; index < numberOfDots; index++) {
-      const object = $(`<div class="carousel__dot"></div>`);
+      const object = $(`<div class="${this.singleDotClassName}"></div>`);
 
       this.dotsElements.push({
         object,
@@ -39,7 +33,7 @@ class Dots {
   }
 
   getDotsArray() {
-    return this.dotsArray = $('.carousel__dotsWrapper', this.element).children()
+    return this.dotsArray = $(`.${this.containerClassName}`, this.element).children()
   }
 
   removeDotsClasses(className) {
@@ -47,11 +41,23 @@ class Dots {
   }
   updatePrimaryDotClass(position) {
     const dots = this.dotsArray
-    const primaryDotClassName = `carousel__dot--primary`
+    const primaryDotClassName = `${this.singleDotClassName}--primary`
 
     this.removeDotsClasses(primaryDotClassName);
     return $(dots[position]).addClass(primaryDotClassName);
   }
+  onDotClick(callback) {
+    $(`.${this.singleDotClassName}`, this.$element).on('click', $event => {
+      if (callback && typeof callback == 'function') {
+        this.dotsElements.find(element => {
+          if ($event.currentTarget === element.object[0]) {
+            callback(element.index);
+          }
+        })
+      }
+    });
+  }
+
 }
 
 export default Dots;
